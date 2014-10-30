@@ -1,10 +1,10 @@
 ﻿using Tridion.ContentManager.ContentManagement;
 
-namespace CouchbaseDelivery.Tridion.ModularTemplates.Helpers
+namespace CouchbaseDelivery.Tridion.ModularTemplates.Extensions
 {
-    public static class ComponentHelper
+    public static class ComponentExtensions
     {
-        public static string GetUniqueFilename(Component component)
+        public static string GetUniqueFilename(this Component component)
         {
             return string.Format("{0}_{1}-{2}",
                                  component.BinaryContent.Filename,

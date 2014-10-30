@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Fields
 {
-    [DataContract]
-    [KnownType(typeof(DateFieldModel))]
-    public class DateFieldModel :BaseFieldModel
+    public class DateFieldModel : IFieldModel
     {
-        [DataMember(IsRequired = true)]
         public IEnumerable<DateTime> Values { get; set; }
     }
 }

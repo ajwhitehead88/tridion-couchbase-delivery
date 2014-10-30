@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Structure;
+using System.Collections.Generic;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Fields
 {
-    [DataContract]
-    [KnownType(typeof(EmbeddedFieldModel))]
-    public class EmbeddedFieldModel : BaseFieldModel
+    public class EmbeddedFieldModel : IFieldModel
     {
-        [DataMember(IsRequired = true)]
-        public IEnumerable<IEnumerable<BaseFieldModel>> Values { get; set; }
+        public IEnumerable<FieldSetModel> Values { get; set; }
     }
 }

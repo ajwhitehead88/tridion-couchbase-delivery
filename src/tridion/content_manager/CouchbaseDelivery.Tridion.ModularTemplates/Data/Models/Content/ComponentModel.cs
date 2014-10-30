@@ -1,20 +1,13 @@
-﻿using System.Runtime.Serialization;
-using CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Fields;
-using System.Collections.Generic;
+﻿using CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Structure;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Content
 {
-    [DataContract]
-    [KnownType(typeof(ComponentModel))]
     public class ComponentModel : IdentifiableObjectModel
     {
-        [DataMember(IsRequired = true)]
-        public IEnumerable<BaseFieldModel> Content { get; set; }
+        public FieldSetModel Content { get; set; }
 
-        [DataMember]
-        public IEnumerable<BaseFieldModel> Metadata { get; set; }
+        public FieldSetModel Metadata { get; set; }
 
-        [DataMember]
-        public BinaryContentModel BinaryContent { get; set; } 
+        public BinaryContentModel BinaryContent { get; set; }
     }
 }
