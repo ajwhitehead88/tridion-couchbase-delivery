@@ -71,7 +71,7 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
             var presentations = new List<ComponentPresentationModel>();
             foreach (var cp in Page.ComponentPresentations)
             {
-                // Ensure template is added to the link info
+                // Ensure template is added to the link info (in case the existing broker is still necessary)
                 Engine.RenderComponentPresentation(cp.Component.Id, cp.ComponentTemplate.Id);
 
                 var linkLevels = cp.ComponentTemplate.GetLinkLevels();
@@ -102,7 +102,8 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
                                                                             : null,
                                                            Metadata = _mapper.MapItemFields(cp.ComponentTemplate.Metadata,
                                                                                             cp.ComponentTemplate.MetadataSchema,
-                                                                                            linkLevels)
+                                                                                            linkLevels),
+                                                           Priority = cp.ComponentTemplate.Priority
                                                        }
                                    };
 

@@ -89,7 +89,7 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         /// </summary>
         protected Publication Publication
         {
-            get { return _publication ?? (_publication = Component.ContextRepository as Publication); }
+            get { return _publication ?? (_publication = Engine.PublishingContext.ResolvedItem.Template.ContextRepository as Publication); }
         }
 
         /// <summary>
