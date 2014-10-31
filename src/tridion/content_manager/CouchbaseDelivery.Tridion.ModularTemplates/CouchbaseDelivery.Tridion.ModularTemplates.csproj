@@ -62,8 +62,7 @@
     <Compile Include="Data\Mapper.cs" />
     <Compile Include="Data\Models\Content\ComponentModel.cs" />
     <Compile Include="Data\Models\Structure\ComponentPresentationModel.cs" />
-    <Compile Include="Data\Models\Layout\ComponentTemplateModel.cs" />
-    <Compile Include="Data\Models\Content\BinaryContentModel.cs" />
+    <Compile Include="Data\Models\Layout\TemplateModel.cs" />
     <Compile Include="Data\Models\Structure\FieldSetModel.cs" />
     <Compile Include="Data\Models\Structure\StructureGroupModel.cs" />
     <Compile Include="Data\Models\Structure\PublicationModel.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Data\Models\Fields\StringFieldModel.cs" />
     <Compile Include="Data\Models\Content\KeywordModel.cs" />
     <Compile Include="Data\Models\Structure\PageModel.cs" />
-    <Compile Include="Data\Models\Layout\PageTemplateModel.cs" />
     <Compile Include="Data\Models\PublishedDataModel.cs" />
     <Compile Include="Data\Models\IdentifiableObjectModel.cs" />
     <Compile Include="Extensions\TemplateExtensions.cs" />

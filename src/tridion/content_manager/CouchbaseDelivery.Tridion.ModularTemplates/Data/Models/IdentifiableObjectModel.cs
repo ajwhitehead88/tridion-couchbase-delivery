@@ -1,6 +1,8 @@
-﻿
-namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models
+﻿namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models
 {
+    /// <summary>
+    /// Base class for common fields for Tridion identifiable objects
+    /// </summary>
     public abstract class IdentifiableObjectModel
     {
         public string TcmUri { get; set; }

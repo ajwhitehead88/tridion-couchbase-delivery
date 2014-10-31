@@ -12,6 +12,9 @@ using Tridion.ContentManager.Templating;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
 {
+    /// <summary>
+    /// Mapper for item fields to the custom JSON model
+    /// </summary>
     public class Mapper
     {
         private static readonly IDictionary<Type, FieldType> TypeMap = new Dictionary<Type, FieldType>
@@ -29,12 +32,21 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
                                                                        };
 
         private readonly Engine _engine;
+        private readonly Package _package;
 
-        public Mapper(Engine engine)
+        public Mapper(Engine engine, Package package)
         {
             _engine = engine;
+            _package = package;
         }
 
+        /// <summary>
+        /// Map item fields to field set model when given the content and schema
+        /// </summary>
+        /// <param name="xmlElement"></param>
+        /// <param name="schema"></param>
+        /// <param name="levels"></param>
+        /// <returns></returns>
         public FieldSetModel MapItemFields(XmlElement xmlElement, Schema schema, int levels)
         {
             if (xmlElement == null || schema == null)
@@ -46,6 +58,12 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
             return MapItemFields(fields, levels);
         }
 
+        /// <summary>
+        /// Map item fields to field set model
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <param name="levels"></param>
+        /// <returns></returns>
         public FieldSetModel MapItemFields(ItemFields fields, int levels)
         {
             var fieldSet = new FieldSetModel();
@@ -58,6 +76,12 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
             return fieldSet;
         }
 
+        /// <summary>
+        /// Create a single field from an item field
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="levels"></param>
+        /// <returns></returns>
         private IFieldModel CreateField(ItemField field, int levels)
         {
             if (levels-- < 0)
@@ -118,20 +142,9 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
                                                                          SchemaName = x.Schema.Title,
                                                                          Content = MapItemFields(x.Content, x.Schema, levels),
                                                                          Metadata = MapItemFields(x.Metadata, x.MetadataSchema, levels),
-                                                                         BinaryContent = x.BinaryContent != null
-                                                                                             ? new BinaryContentModel
-                                                                                               {
-                                                                                                   Filename =
-                                                                                                       ComponentExtensions.GetUniqueFilename
-                                                                                                       (x),
-                                                                                                   BinaryContent =
-                                                                                                       Convert.ToBase64String(
-                                                                                                                              x
-                                                                                                                                  .BinaryContent
-                                                                                                                                  .GetByteArray
-                                                                                                                                  ())
-                                                                                               }
-                                                                                             : null
+                                                                         BinaryUrl = x.BinaryContent != null
+                                                                                         ? x.PublishBinary(_engine, _package)
+                                                                                         : null
                                                                      }).ToArray()
                            };
                 default:
@@ -139,6 +152,9 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data
             }
         }
 
+        /// <summary>
+        /// Field types used for mapping
+        /// </summary>
         private enum FieldType
         {
             Text,

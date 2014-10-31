@@ -8,6 +8,6 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Content
 
         public FieldSetModel Metadata { get; set; }
 
-        public BinaryContentModel BinaryContent { get; set; }
+        public string BinaryUrl { get; set; }
     }
 }

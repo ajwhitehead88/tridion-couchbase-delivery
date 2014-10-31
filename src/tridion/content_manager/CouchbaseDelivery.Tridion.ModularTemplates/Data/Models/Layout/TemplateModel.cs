@@ -2,7 +2,10 @@
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models.Layout
 {
-    public class ComponentTemplateModel : IdentifiableObjectModel
+    /// <summary>
+    /// Models a template
+    /// </summary>
+    public class TemplateModel : IdentifiableObjectModel
     {
         public FieldSetModel Metadata { get; set; }
     }

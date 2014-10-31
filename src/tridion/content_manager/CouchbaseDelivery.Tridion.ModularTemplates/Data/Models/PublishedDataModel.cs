@@ -3,6 +3,9 @@ using System;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models
 {
+    /// <summary>
+    /// Represents the published out model for a page
+    /// </summary>
     public class PublishedDataModel
     {
         public PageModel Page { get; set; }
