@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.tridion.broker.StorageException;
-import com.tridion.data.CharacterData;
 import com.tridion.storage.BinaryContent;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
+import com.tridion.storage.extensions.couchbase.json.JsonHelper;
 import com.tridion.storage.persistence.JPABinaryContentDAO;
-import com.tridion.storage.persistence.JPAPageDAO;
 
 @Component("JPACouchbasePageDAO.java")
 @Scope("prototype")
@@ -48,7 +47,7 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			if (manager.set(key, binaryContent.getString()))
+			if (manager.set(key, JsonHelper.createJson(binaryContent, relativePath)))
 			{
 				LOG.debug("Successfully added document with key " + key);
 			}
@@ -75,7 +74,7 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			if (manager.set(key, page.getString()))
+			if (manager.set(key, JsonHelper.createJson(binaryContent, newRelativePath)))
 			{
 				LOG.debug("Successfully updated document with key " + key);
 			}

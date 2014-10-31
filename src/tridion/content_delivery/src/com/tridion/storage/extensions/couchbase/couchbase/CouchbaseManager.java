@@ -18,7 +18,6 @@ import com.tridion.storage.extensions.couchbase.couchbase.transcoders.NetJsonTra
 
 /**
  * Couchbase client for managing setting and deleting JSON objects 
- *
  */
 public class CouchbaseManager implements AutoCloseable
 {
