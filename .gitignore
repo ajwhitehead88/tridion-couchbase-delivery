@@ -186,3 +186,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+src/tridion/content_delivery/config/cd_licenses.xml
+src/tridion/content_delivery/.settings/
+src/tridion/content_delivery/lib/

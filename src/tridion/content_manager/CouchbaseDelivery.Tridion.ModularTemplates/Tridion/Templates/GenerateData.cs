@@ -8,8 +8,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using Tridion.ContentManager.CommunicationManagement;
+using Tridion.ContentManager.ContentManagement;
 using Tridion.ContentManager.Templating;
 using Tridion.ContentManager.Templating.Assembly;
+using ComponentPresentation = Tridion.ContentManager.CommunicationManagement.ComponentPresentation;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
 {
@@ -24,16 +27,15 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
 
         protected override void Transform()
         {
-            _pageLinkLevels = Page.PageTemplate.GetLinkLevels();
             _mapper = new Mapper(Engine, Package);
 
-            var json = JsonConvert.SerializeObject(new PublishedDataModel
-                                                   {
-                                                       Page = CreatePageModel(),
-                                                       Publication = CreatePublicationModel(),
-                                                       Parent = CreateStructureGroupModel(),
-                                                       PublishDate = DateTime.UtcNow
-                                                   },
+            PublishedDataModel model = null;
+            if (Page != null)
+            {
+                model = CreatePublishedPage();
+            }
+
+            var json = JsonConvert.SerializeObject(CreatePublishedPage(),
                                                    new JsonSerializerSettings
                                                    {
                                                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -42,6 +44,36 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
                                                    });
 
             Package.PushItem(Package.OutputName, Package.CreateStringItem(ContentType.Text, json));
+        }
+
+        /// <summary>
+        /// Create a publish model on page publish
+        /// </summary>
+        /// <returns></returns>
+        private PagePublishedDataModel CreatePublishedPage()
+        {
+            _pageLinkLevels = Page.PageTemplate.GetLinkLevels();
+
+            return new PagePublishedDataModel
+                   {
+                       Page = CreatePageModel(),
+                       Publication = CreatePublicationModel(),
+                       Parent = CreateStructureGroupModel(),
+                       PublishDate = DateTime.UtcNow
+                   };
+        }
+
+        /// <summary>
+        /// Create a single published presentation
+        /// </summary>
+        /// <returns></returns>
+        private PresentationPublishedDataModel CreatePublishedPresentation()
+        {
+            var template = Engine.PublishingContext.ResolvedItem.Template as ComponentTemplate;
+            return new PresentationPublishedDataModel
+                   {
+                       Presentation = CreateComponentPresentation(Component, template)
+                   };
         }
 
         /// <summary>
@@ -74,43 +106,55 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
                 // Ensure template is added to the link info (in case the existing broker is still necessary)
                 Engine.RenderComponentPresentation(cp.Component.Id, cp.ComponentTemplate.Id);
 
-                var linkLevels = cp.ComponentTemplate.GetLinkLevels();
-
-                var presentation = new ComponentPresentationModel
-                                   {
-                                       ComponentModel = new ComponentModel
-                                                        {
-                                                            TcmUri = cp.Component.Id,
-                                                            Title = cp.Component.Title,
-                                                            SchemaName = cp.Component.Schema.Title,
-                                                            Content = _mapper.MapItemFields(cp.Component.Content,
-                                                                                            cp.Component.Schema,
-                                                                                            linkLevels),
-                                                            Metadata = _mapper.MapItemFields(cp.Component.Metadata,
-                                                                                             cp.Component.MetadataSchema,
-                                                                                             linkLevels),
-                                                            BinaryUrl = cp.Component.BinaryContent != null
-                                                                            ? cp.Component.PublishBinary(Engine, Package)
-                                                                            : null
-                                                        },
-                                       TemplateModel = new TemplateModel
-                                                       {
-                                                           TcmUri = cp.Component.Id,
-                                                           Title = cp.Component.Title,
-                                                           SchemaName = cp.ComponentTemplate.MetadataSchema != null
-                                                                            ? cp.ComponentTemplate.MetadataSchema.Title
-                                                                            : null,
-                                                           Metadata = _mapper.MapItemFields(cp.ComponentTemplate.Metadata,
-                                                                                            cp.ComponentTemplate.MetadataSchema,
-                                                                                            linkLevels),
-                                                           Priority = cp.ComponentTemplate.Priority
-                                                       }
-                                   };
+                var presentation = CreateComponentPresentation(cp.Component, cp.ComponentTemplate);
 
                 presentations.Add(presentation);
             }
 
             return presentations;
+        }
+
+        /// <summary>
+        /// Create a single component presentation model
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="componentTemplate"></param>
+        /// <returns></returns>
+        private ComponentPresentationModel CreateComponentPresentation(Component component, ComponentTemplate componentTemplate)
+        {
+            var linkLevels = componentTemplate.GetLinkLevels();
+
+            var presentation = new ComponentPresentationModel
+                               {
+                                   ComponentModel = new ComponentModel
+                                                    {
+                                                        TcmUri = component.Id,
+                                                        Title = component.Title,
+                                                        SchemaName = component.Schema.Title,
+                                                        Content = _mapper.MapItemFields(component.Content,
+                                                                                        component.Schema,
+                                                                                        linkLevels),
+                                                        Metadata = _mapper.MapItemFields(component.Metadata,
+                                                                                         component.MetadataSchema,
+                                                                                         linkLevels),
+                                                        BinaryUrl = component.BinaryContent != null
+                                                                        ? component.PublishBinary(Engine, Package)
+                                                                        : null
+                                                    },
+                                   TemplateModel = new TemplateModel
+                                                   {
+                                                       TcmUri = component.Id,
+                                                       Title = component.Title,
+                                                       SchemaName = componentTemplate.MetadataSchema != null
+                                                                        ? componentTemplate.MetadataSchema.Title
+                                                                        : null,
+                                                       Metadata = _mapper.MapItemFields(componentTemplate.Metadata,
+                                                                                        componentTemplate.MetadataSchema,
+                                                                                        linkLevels),
+                                                       Priority = componentTemplate.Priority
+                                                   }
+                               };
+            return presentation;
         }
 
         /// <summary>

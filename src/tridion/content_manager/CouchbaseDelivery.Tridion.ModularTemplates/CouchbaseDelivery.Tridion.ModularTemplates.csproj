@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Data\Mapper.cs" />
     <Compile Include="Data\Models\Content\ComponentModel.cs" />
+    <Compile Include="Data\Models\PresentationPublishedDataModel.cs" />
+    <Compile Include="Data\Models\PagePublishedDataModel.cs" />
     <Compile Include="Data\Models\Structure\ComponentPresentationModel.cs" />
     <Compile Include="Data\Models\Layout\TemplateModel.cs" />
     <Compile Include="Data\Models\Structure\FieldSetModel.cs" />

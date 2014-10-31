@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StorageDAOBundles>
+    <StorageDAOBundle type="filesystem">
+        <StorageDAO typeMapping="Page" class="com.tridion.storage.extensions.celebrity.FSCouchbasePageDAO" />
+    </StorageDAOBundle>
+    <couchbase>
+        <servers bucket="tridion" designdocument="dev_tridion">
+            <add uri="http://localhost:8091/pools" />
+        </servers>
+    </couchbase>
+</StorageDAOBundles>
