@@ -15,7 +15,7 @@ import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
 import com.tridion.storage.extensions.couchbase.json.JsonHelper;
 import com.tridion.storage.persistence.JPABinaryContentDAO;
 
-@Component("JPACouchbasePageDAO.java")
+@Component("JPACouchbaseBinaryDAO")
 @Scope("prototype")
 public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 {

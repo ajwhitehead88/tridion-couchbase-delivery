@@ -15,7 +15,7 @@ import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
 import com.tridion.storage.persistence.JPAComponentPresentationDAO;
 import com.tridion.storage.util.ComponentPresentationTypeEnum;
 
-@Component("JPACouchbasePageDAO.java")
+@Component("JPACouchbasePresentationDAO")
 @Scope("prototype")
 public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 {
