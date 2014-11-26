@@ -2,8 +2,6 @@ package com.tridion.storage.extensions.couchbase.configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,14 +70,14 @@ public class CouchbaseConfiguration
 	 * Get the couchbase bucket servers 
 	 * @return
 	 */
-	public static List<URI> getCouchbaseServers()
+	public static List<String> getCouchbaseServers()
 	{
 		try
 		{
-			List<URI> uris = new ArrayList<URI>(); 
+			List<String> uris = new ArrayList<String>(); 
 			for (Configuration node : getConfig().getChild("couchbase").getChild("servers").getChildrenByName("add"))
 			{
-				uris.add(new URI(node.getAttribute("uri")));
+				uris.add(node.getAttribute("uri"));
 			}
 			
 			return uris;
@@ -87,10 +85,6 @@ public class CouchbaseConfiguration
 		catch (ConfigurationException e)
 		{
 			throw new RuntimeException("Error reading couchbase servers from bundle configuration", e);
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException("Error parsing couchbase servers from bundle configuration", e);
 		}
 	}
 }

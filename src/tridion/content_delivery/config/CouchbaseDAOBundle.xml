@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StorageDAOBundles>
     <StorageDAOBundle type="filesystem">
-        <StorageDAO typeMapping="Page" class="com.tridion.storage.extensions.celebrity.FSCouchbasePageDAO" />
+        <StorageDAO typeMapping="Page" class="com.tridion.storage.extensions.couchbase.JPACouchbasePageDAO" />
+        <StorageDAO typeMapping="Binary" class="com.tridion.storage.extensions.couchbase.JPACouchbaseBinaryDAO" />
+        <StorageDAO typeMapping="ComponentPresentation" class="com.tridion.storage.extensions.couchbase.JPACouchbasePresentationDAO" />
     </StorageDAOBundle>
     <couchbase>
-        <servers bucket="tridion" designdocument="dev_tridion">
+        <servers bucket="default">
             <add uri="http://localhost:8091/pools" />
         </servers>
     </couchbase>

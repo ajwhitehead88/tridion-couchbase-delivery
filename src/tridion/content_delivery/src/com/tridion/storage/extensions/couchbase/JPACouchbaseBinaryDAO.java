@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.couchbase.client.java.document.JsonDocument;
 import com.tridion.broker.StorageException;
 import com.tridion.storage.BinaryContent;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
@@ -28,7 +29,7 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 	}
 	
 	public JPACouchbaseBinaryDAO(String storageId, EntityManagerFactory entityManagerFactory, String storageName)
-	{
+    {
 		super(storageId, entityManagerFactory, storageName);
 		LOG.debug("Initialising couchbase binary indexer");
 	}
@@ -47,14 +48,8 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			if (manager.set(key, JsonHelper.createJson(binaryContent, relativePath)))
-			{
-				LOG.debug("Successfully added document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error adding document with key " + key);
-			}
+			manager.set(JsonDocument.create(key, JsonHelper.createJson(binaryContent, relativePath)));
+            LOG.debug("Successfully added document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -74,14 +69,8 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			if (manager.set(key, JsonHelper.createJson(binaryContent, newRelativePath)))
-			{
-				LOG.debug("Successfully updated document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error updating document with key " + key);
-			}
+			manager.set(JsonDocument.create(key, JsonHelper.createJson(binaryContent, newRelativePath)));
+			LOG.debug("Successfully updated document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -102,14 +91,8 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, publicationId, binaryId);
-			if (manager.delete(key))
-			{
-				LOG.debug("Successfully deleted document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error deleting document with key " + key);
-			}
+			manager.delete(key);
+			LOG.debug("Successfully deleted document with key " + key);
 		}
 		catch (Exception e)
 		{

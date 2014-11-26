@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.couchbase.client.java.document.JsonStringDocument;
 import com.tridion.broker.StorageException;
 import com.tridion.data.CharacterData;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
@@ -46,14 +47,8 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, page.getPublicationId(), page.getId());
-			if (manager.set(key, page.getString()))
-			{
-				LOG.debug("Successfully added document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error adding document with key " + key);
-			}
+			manager.set(JsonStringDocument.create(key, page.getString()));
+			LOG.debug("Successfully added document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -73,14 +68,8 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, page.getPublicationId(), page.getId());
-			if (manager.set(key, page.getString()))
-			{
-				LOG.debug("Successfully updated document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error updating document with key " + key);
-			}
+			manager.set(JsonStringDocument.create(key, page.getString()));
+			LOG.debug("Successfully updated document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -101,14 +90,8 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
 			String key = String.format(KEY_FORMAT, publicationId, pageId);
-			if (manager.delete(key))
-			{
-				LOG.debug("Successfully deleted document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error deleting document with key " + key);
-			}
+			manager.delete(key);
+			LOG.debug("Successfully deleted document with key " + key);
 		}
 		catch (Exception e)
 		{

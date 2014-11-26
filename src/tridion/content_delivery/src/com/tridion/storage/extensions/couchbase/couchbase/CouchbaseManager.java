@@ -1,20 +1,18 @@
 package com.tridion.storage.extensions.couchbase.couchbase;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import net.spy.memcached.internal.OperationFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.couchbase.client.CouchbaseClient;
-import com.couchbase.client.CouchbaseConnectionFactoryBuilder;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.document.JsonDocument;
+import com.couchbase.client.java.document.JsonStringDocument;
 import com.tridion.storage.extensions.couchbase.configuration.CouchbaseConfiguration;
-import com.tridion.storage.extensions.couchbase.couchbase.transcoders.NetJsonTranscoder;
 
 /**
  * Couchbase client for managing setting and deleting JSON objects 
@@ -23,19 +21,17 @@ public class CouchbaseManager implements AutoCloseable
 {
 	private static final Logger LOG = LoggerFactory.getLogger(CouchbaseManager.class);
 	
-	private CouchbaseClient client;
+	private Cluster cluster;
+	private Bucket bucket;
 		
 	public CouchbaseManager() throws IOException
 	{
 	    // Connect to the Cluster
-	    List<URI> hosts = CouchbaseConfiguration.getCouchbaseServers();
-	    String bucket = CouchbaseConfiguration.getCouchbaseBucketName();
-	    String password = "";
+	    List<String> hosts = CouchbaseConfiguration.getCouchbaseServers();
+	    String bucketName = CouchbaseConfiguration.getCouchbaseBucketName();
 	    
-	    CouchbaseConnectionFactoryBuilder cfb = new CouchbaseConnectionFactoryBuilder();
-	    cfb.setTranscoder(new NetJsonTranscoder());
-	    cfb.setOpTimeout(10000);
-	    client = new CouchbaseClient(cfb.buildCouchbaseConnection(hosts, bucket, password));
+	    cluster = CouchbaseCluster.create(hosts);
+	    bucket = cluster.openBucket(bucketName);
 	    
 	    LOG.debug("Couchbase client created");
 	}
@@ -44,7 +40,7 @@ public class CouchbaseManager implements AutoCloseable
 	public void close() throws Exception
 	{
 	    // Shutting down properly
-		client.shutdown(60, TimeUnit.SECONDS);
+		cluster.disconnect();
 	    LOG.debug("Couchbase client shutdown");
 	}
 	
@@ -55,36 +51,38 @@ public class CouchbaseManager implements AutoCloseable
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 */
-	public boolean set(String key, String document) throws InterruptedException, ExecutionException
+	public void set(JsonDocument document) throws InterruptedException, ExecutionException
 	{
-        LOG.debug("Setting document in DB with key: " + key);
+        LOG.debug("Setting document in DB with key: " + document.id());
         
         // Set the document
-        OperationFuture<Boolean> operation = client.set(key, document);
-
-        // Get the document to block the thread (simulate synchronous set)
-        operation.get();
-        
-        // Return the result
-        return operation.isDone();
+        bucket.upsert(document);
 	}
-	
+
+	/**
+	 * Sets a single document
+	 * @param key
+	 * @param document
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
+	 */
+	public void set(JsonStringDocument document) throws InterruptedException, ExecutionException
+	{
+        LOG.debug("Setting document in DB with key: " + document.id());
+        
+        // Set the document
+        bucket.upsert(document);
+	}	
+
 	/**
 	 * Deletes a document out of Couchbase
-	 * @param key
-	 * @return
+	 * @param id
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public boolean delete(String key) throws InterruptedException, ExecutionException
+	public void delete(String id) throws InterruptedException, ExecutionException
 	{
-		// Delete the document by key
-		OperationFuture<Boolean> operation = client.delete(key);
-		
-        // Get the document to block the thread (simulate synchronous set)
-        operation.get();
-        
-        // Return the result
-        return operation.isDone();
+		// Delete the document by id
+		bucket.remove(id);
 	}
 }

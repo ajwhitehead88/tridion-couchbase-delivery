@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.couchbase.client.java.document.JsonStringDocument;
 import com.tridion.broker.StorageException;
 import com.tridion.storage.ComponentPresentation;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
@@ -51,14 +52,8 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 					itemToUpdate.getComponentId(),
 					itemToUpdate.getPublicationId(),
 					itemToUpdate.getTemplateId());
-			if (manager.set(key, new String(itemToUpdate.getContent())))
-			{
-				LOG.debug("Successfully added document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error adding document with key " + key);
-			}
+			manager.set(JsonStringDocument.create(key, new String(itemToUpdate.getContent())));
+			LOG.debug("Successfully added document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -82,14 +77,8 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 					itemToUpdate.getComponentId(),
 					itemToUpdate.getPublicationId(),
 					itemToUpdate.getTemplateId());
-			if (manager.set(key, new String(itemToUpdate.getContent())))
-			{
-				LOG.debug("Successfully updated document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error updating document with key " + key);
-			}
+			manager.set(JsonStringDocument.create(key, new String(itemToUpdate.getContent())));
+			LOG.debug("Successfully updated document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -114,14 +103,8 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 					presentation.getComponentId(),
 					presentation.getPublicationId(),
 					presentation.getTemplateId());
-			if (manager.delete(key))
-			{
-				LOG.debug("Successfully deleted document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error deleting document with key " + key);
-			}
+			manager.delete(key);
+			LOG.debug("Successfully deleted document with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -146,14 +129,7 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 					componentId,
 					publicationId,
 					componentTemplateId);
-			if (manager.delete(key))
-			{
-				LOG.debug("Successfully deleted document with key " + key);
-			}
-			else
-			{
-				LOG.error("Error deleting document with key " + key);
-			}
+			manager.delete(key);
 		}
 		catch (Exception e)
 		{
