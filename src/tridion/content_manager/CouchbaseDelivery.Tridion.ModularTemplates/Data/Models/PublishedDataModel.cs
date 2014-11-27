@@ -8,5 +8,7 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models
     public abstract class PublishedDataModel
     {
         public DateTime PublishDate { get; set; }
+
+        public int PublicationId { get; set; }
     }
 }

@@ -66,7 +66,8 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
                        Page = CreatePageModel(),
                        Publication = CreatePublicationModel(),
                        Parent = CreateStructureGroupModel(),
-                       PublishDate = DateTime.UtcNow
+                       PublishDate = DateTime.UtcNow,
+                       PublicationId = Publication.Id.ItemId
                    };
         }
 
@@ -78,7 +79,8 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         {
             return new PresentationPublishedDataModel
                    {
-                       Presentation = CreateComponentPresentation(Component, Template)
+                       Presentation = CreateComponentPresentation(Component, Template),
+                       PublicationId = Publication.Id.ItemId
                    };
         }
 

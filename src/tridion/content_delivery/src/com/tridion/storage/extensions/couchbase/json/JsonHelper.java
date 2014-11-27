@@ -21,6 +21,7 @@ public class JsonHelper
 		String tcmid = String.format("tcm:%s-%s-16", binaryContent.getPublicationId(), binaryContent.getBinaryId());
 		return JsonDocument.create(id, JsonObject.empty()
                                                  .put("tcmUri", tcmid)
+                                                 .put("publicationId", binaryContent.getPublicationId())
                                                  .put("publishedUrl", relativePath)
                                                  .put("content", Base64.encodeBase64String(binaryContent.getContent()))
                                                  .put("publishDate", df.format(new Date())));
