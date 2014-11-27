@@ -13,7 +13,6 @@ import com.tridion.storage.BinaryContent;
 
 public class JsonHelper
 {
-
 	public static JsonDocument createJson(String id, BinaryContent binaryContent, String relativePath)
 	{
         TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -24,7 +23,6 @@ public class JsonHelper
                                                  .put("tcmUri", tcmid)
                                                  .put("publishedUrl", relativePath)
                                                  .put("content", Base64.encodeBase64String(binaryContent.getContent()))
-                                                 .put("publishDate", df.format(new Date()))
-                                                 .put("type", "binary"));
+                                                 .put("publishDate", df.format(new Date())));
 	}
 }
