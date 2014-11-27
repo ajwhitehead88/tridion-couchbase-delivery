@@ -15,6 +15,7 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         private Page _page;
         private StructureGroup _parent;
         private Component _component;
+        private ComponentTemplate _template;
 
         protected TemplatingLogger Log;
 
@@ -84,6 +85,13 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
             }
         }
 
+        /// <summary>
+        /// Get the current component template
+        /// </summary>
+        protected ComponentTemplate Template
+        {
+            get { return _template ?? (_template = Engine.PublishingContext.ResolvedItem.Template as ComponentTemplate); }
+        }
         /// <summary>
         /// Get the publication
         /// </summary>

@@ -12,7 +12,6 @@ using Tridion.ContentManager.CommunicationManagement;
 using Tridion.ContentManager.ContentManagement;
 using Tridion.ContentManager.Templating;
 using Tridion.ContentManager.Templating.Assembly;
-using ComponentPresentation = Tridion.ContentManager.CommunicationManagement.ComponentPresentation;
 
 namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
 {
@@ -29,13 +28,21 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         {
             _mapper = new Mapper(Engine, Package);
 
-            PublishedDataModel model = null;
+            PublishedDataModel model;
             if (Page != null)
             {
                 model = CreatePublishedPage();
             }
+            else if (Template != null)
+            {
+                model = CreatePublishedPresentation();
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot run this template without a page or a component template");
+            }
 
-            var json = JsonConvert.SerializeObject(CreatePublishedPage(),
+            var json = JsonConvert.SerializeObject(model,
                                                    new JsonSerializerSettings
                                                    {
                                                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -69,10 +76,9 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         /// <returns></returns>
         private PresentationPublishedDataModel CreatePublishedPresentation()
         {
-            var template = Engine.PublishingContext.ResolvedItem.Template as ComponentTemplate;
             return new PresentationPublishedDataModel
                    {
-                       Presentation = CreateComponentPresentation(Component, template)
+                       Presentation = CreateComponentPresentation(Component, Template)
                    };
         }
 

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.couchbase.client.java.document.JsonStringDocument;
+import com.couchbase.client.java.document.RawJsonDocument;
 import com.tridion.broker.StorageException;
 import com.tridion.data.CharacterData;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
@@ -48,7 +48,7 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		{
 			String key = String.format(PAGE_FORMAT, page.getPublicationId(), page.getId());
             LOG.debug("Adding page with key " + key);
-			manager.set(JsonStringDocument.create(key, page.getString()));
+			manager.set(RawJsonDocument.create(key, page.getString()));
 			LOG.debug("Successfully added page with key " + key);
 		}
 		catch (Exception e)
@@ -70,7 +70,7 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		{
 			String key = String.format(PAGE_FORMAT, page.getPublicationId(), page.getId());
             LOG.debug("Updating page with key " + key);
-			manager.set(JsonStringDocument.create(key, page.getString()));
+			manager.set(RawJsonDocument.create(key, page.getString()));
 			LOG.debug("Successfully updated page with key " + key);
 		}
 		catch (Exception e)
