@@ -7,14 +7,10 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Data.Models
     /// </summary>
     public class PagePublishedDataModel : PublishedDataModel
     {
-        private const string TypeValue = "page";
-
         public PageModel Page { get; set; }
 
         public StructureGroupModel Parent { get; set; }
 
         public PublicationModel Publication { get; set; }
-
-        public override string Type { get { return TypeValue; } }
     }
 }
