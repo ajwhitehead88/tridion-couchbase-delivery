@@ -19,7 +19,7 @@ import com.tridion.storage.util.ComponentPresentationTypeEnum;
 @Scope("prototype")
 public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 {
-	private static final String KEY_FORMAT = "tcm:%s-%s-16_tcm:%s-%s-32";
+	private static final String KEY_FORMAT = "Presentation_%s_%s_%s";
 	private static final Logger LOG = LoggerFactory.getLogger(JPACouchbasePresentationDAO.class);
 
 	public JPACouchbasePresentationDAO(String storageId, EntityManagerFactory entityManagerFactory, EntityManager entityManager, String storageName)
@@ -50,10 +50,10 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 			String key = String.format(KEY_FORMAT,
 					itemToUpdate.getPublicationId(),
 					itemToUpdate.getComponentId(),
-					itemToUpdate.getPublicationId(),
 					itemToUpdate.getTemplateId());
+            LOG.debug("Adding presentation with key " + key);
 			manager.set(JsonStringDocument.create(key, new String(itemToUpdate.getContent())));
-			LOG.debug("Successfully added document with key " + key);
+			LOG.debug("Successfully added presentation with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -75,15 +75,15 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 			String key = String.format(KEY_FORMAT,
 					itemToUpdate.getPublicationId(),
 					itemToUpdate.getComponentId(),
-					itemToUpdate.getPublicationId(),
 					itemToUpdate.getTemplateId());
+            LOG.debug("Updating presentation with key " + key);
 			manager.set(JsonStringDocument.create(key, new String(itemToUpdate.getContent())));
-			LOG.debug("Successfully updated document with key " + key);
+			LOG.debug("Successfully updated presentation with key " + key);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing presentation from couchbase", e);
+			throw new StorageException("Error removing presentation from couchbase", e);
 		}
 	}
 
@@ -101,15 +101,15 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 			String key = String.format(KEY_FORMAT,
 					presentation.getPublicationId(),
 					presentation.getComponentId(),
-					presentation.getPublicationId(),
 					presentation.getTemplateId());
+            LOG.debug("Deleting presentation with key " + key);
 			manager.delete(key);
-			LOG.debug("Successfully deleted document with key " + key);
+			LOG.debug("Successfully deleted presentation with key " + key);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing presentation from couchbase", e);
+			throw new StorageException("Error removing presentation from couchbase", e);
 		}
 	}
 	
@@ -127,14 +127,13 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 			String key = String.format(KEY_FORMAT,
 					publicationId,
 					componentId,
-					publicationId,
 					componentTemplateId);
 			manager.delete(key);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing presentation from couchbase", e);
+			throw new StorageException("Error removing presentation from couchbase", e);
 		}
 	}
 }

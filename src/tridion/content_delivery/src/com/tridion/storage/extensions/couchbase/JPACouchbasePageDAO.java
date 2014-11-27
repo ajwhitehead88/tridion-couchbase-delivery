@@ -18,7 +18,7 @@ import com.tridion.storage.persistence.JPAPageDAO;
 @Scope("prototype")
 public class JPACouchbasePageDAO extends JPAPageDAO
 {
-	private static final String KEY_FORMAT = "tcm:%s-%s-64";
+	private static final String PAGE_FORMAT = "Page_%s_%s";
 	private static final Logger LOG = LoggerFactory.getLogger(JPACouchbasePageDAO.class);
 
 	public JPACouchbasePageDAO(String storageId, EntityManagerFactory entityManagerFactory, EntityManager entityManager, String storageName)
@@ -46,9 +46,10 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, page.getPublicationId(), page.getId());
+			String key = String.format(PAGE_FORMAT, page.getPublicationId(), page.getId());
+            LOG.debug("Adding page with key " + key);
 			manager.set(JsonStringDocument.create(key, page.getString()));
-			LOG.debug("Successfully added document with key " + key);
+			LOG.debug("Successfully added page with key " + key);
 		}
 		catch (Exception e)
 		{
@@ -67,14 +68,15 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, page.getPublicationId(), page.getId());
+			String key = String.format(PAGE_FORMAT, page.getPublicationId(), page.getId());
+            LOG.debug("Updating page with key " + key);
 			manager.set(JsonStringDocument.create(key, page.getString()));
-			LOG.debug("Successfully updated document with key " + key);
+			LOG.debug("Successfully updated page with key " + key);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing page from couchbase", e);
+			throw new StorageException("Error removing page from couchbase", e);
 		}
 	}
 
@@ -89,14 +91,15 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, publicationId, pageId);
+			String key = String.format(PAGE_FORMAT, publicationId, pageId);
+            LOG.debug("Removing page with key " + key);
 			manager.delete(key);
-			LOG.debug("Successfully deleted document with key " + key);
+			LOG.debug("Successfully deleted page with key " + key);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing page from couchbase", e);
+			throw new StorageException("Error removing page from couchbase", e);
 		}
 	}
 }

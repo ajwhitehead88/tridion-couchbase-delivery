@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.couchbase.client.java.document.JsonDocument;
 import com.tridion.broker.StorageException;
 import com.tridion.storage.BinaryContent;
 import com.tridion.storage.extensions.couchbase.couchbase.CouchbaseManager;
@@ -19,7 +18,7 @@ import com.tridion.storage.persistence.JPABinaryContentDAO;
 @Scope("prototype")
 public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 {
-	private static final String KEY_FORMAT = "tcm:%s-%s-16";
+	private static final String ID_FORMAT = "Binary_%s_%s";
 	private static final Logger LOG = LoggerFactory.getLogger(JPACouchbaseBinaryDAO.class);
 
 	public JPACouchbaseBinaryDAO(String storageId, EntityManagerFactory entityManagerFactory, EntityManager entityManager, String storageName)
@@ -47,9 +46,10 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			manager.set(JsonDocument.create(key, JsonHelper.createJson(binaryContent, relativePath)));
-            LOG.debug("Successfully added document with key " + key);
+			String tcmid = String.format(ID_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
+            LOG.debug("Adding binary with tcmid " + tcmid);
+			manager.set(JsonHelper.createJson(tcmid, binaryContent, relativePath));
+            LOG.debug("Successfully added binary with tcmid " + tcmid);
 		}
 		catch (Exception e)
 		{
@@ -68,14 +68,15 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-			manager.set(JsonDocument.create(key, JsonHelper.createJson(binaryContent, newRelativePath)));
-			LOG.debug("Successfully updated document with key " + key);
+			String tcmid = String.format(ID_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
+            LOG.debug("Updating binary with tcmid " + tcmid);
+			manager.set(JsonHelper.createJson(tcmid, binaryContent, newRelativePath));
+			LOG.debug("Successfully updated binary with tcmid " + tcmid);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing binary from couchbase", e);
+			throw new StorageException("Error removing binary from couchbase", e);
 		}
 	}
 
@@ -90,14 +91,15 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String key = String.format(KEY_FORMAT, publicationId, binaryId);
-			manager.delete(key);
-			LOG.debug("Successfully deleted document with key " + key);
+			String tcmid = String.format(ID_FORMAT, publicationId, binaryId);
+            LOG.debug("Removing binary with tcmid " + tcmid);
+			manager.delete(tcmid);
+			LOG.debug("Successfully deleted binary with tcmid " + tcmid);
 		}
 		catch (Exception e)
 		{
-			LOG.error("Error removing document from couchbase", e);
-			throw new StorageException("Error removing document from couchbase", e);
+			LOG.error("Error removing binary from couchbase", e);
+			throw new StorageException("Error removing binary from couchbase", e);
 		}
 	}
 }

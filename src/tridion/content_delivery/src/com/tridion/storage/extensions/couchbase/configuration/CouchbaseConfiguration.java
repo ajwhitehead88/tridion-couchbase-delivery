@@ -77,7 +77,7 @@ public class CouchbaseConfiguration
 			List<String> uris = new ArrayList<String>(); 
 			for (Configuration node : getConfig().getChild("couchbase").getChild("servers").getChildrenByName("add"))
 			{
-				uris.add(node.getAttribute("uri"));
+				uris.add(node.getAttribute("node"));
 			}
 			
 			return uris;
