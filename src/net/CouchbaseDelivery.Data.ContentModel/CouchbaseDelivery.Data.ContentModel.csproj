@@ -49,6 +49,7 @@
     <Compile Include="Model\IdentifiableObjectModel.cs" />
     <Compile Include="Model\Layout\TemplateModel.cs" />
     <Compile Include="Model\PagePublishedDataModel.cs" />
+    <Compile Include="Model\Content\BinaryModel.cs" />
     <Compile Include="Model\PresentationPublishedDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\PublishedDataModel.cs" />

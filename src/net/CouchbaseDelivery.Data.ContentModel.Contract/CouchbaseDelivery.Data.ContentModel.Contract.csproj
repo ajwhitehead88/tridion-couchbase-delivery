@@ -45,6 +45,7 @@
     <Compile Include="Model\Content\IFieldModel.cs" />
     <Compile Include="Model\Content\IKeywordModel.cs" />
     <Compile Include="Model\IIdentifiableObjectModel.cs" />
+    <Compile Include="Model\Content\IBinaryModel.cs" />
     <Compile Include="Model\Layout\ITemplateModel.cs" />
     <Compile Include="Model\IPagePublishedDataModel.cs" />
     <Compile Include="Model\IPresentationPublishedDataModel.cs" />

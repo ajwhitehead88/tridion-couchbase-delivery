@@ -18,7 +18,7 @@ import com.tridion.storage.persistence.JPABinaryContentDAO;
 @Scope("prototype")
 public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 {
-	private static final String ID_FORMAT = "Binary_%s_%s";
+	private static final String BINARY_FORMAT = "Binary_%s_%s";
 	private static final Logger LOG = LoggerFactory.getLogger(JPACouchbaseBinaryDAO.class);
 
 	public JPACouchbaseBinaryDAO(String storageId, EntityManagerFactory entityManagerFactory, EntityManager entityManager, String storageName)
@@ -34,7 +34,7 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 	}
 	
 	/**
-	 * Create indexes the itinerary content into Couchbase
+	 * Create indexes the binary content into Couchbase
 	 */
 	@Override
 	public void create(BinaryContent binaryContent, String relativePath) throws StorageException
@@ -46,10 +46,10 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String tcmid = String.format(ID_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-            LOG.debug("Adding binary with tcmid " + tcmid);
-			manager.set(JsonHelper.createJson(tcmid, binaryContent, relativePath));
-            LOG.debug("Successfully added binary with tcmid " + tcmid);
+			String id = String.format(BINARY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
+            LOG.debug("Adding binary with id " + id);
+			manager.set(JsonHelper.createBinaryJson(id, binaryContent, relativePath));
+            LOG.debug("Successfully added binary with id " + id);
 		}
 		catch (Exception e)
 		{
@@ -58,6 +58,9 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		}
 	}
 
+	/**
+	 * Update indexes the binary content into Couchbase
+	 */
 	@Override
 	public void update(BinaryContent binaryContent, String originalRelativePath, String newRelativePath) throws StorageException
 	{
@@ -68,10 +71,10 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 		
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String tcmid = String.format(ID_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
-            LOG.debug("Updating binary with tcmid " + tcmid);
-			manager.set(JsonHelper.createJson(tcmid, binaryContent, newRelativePath));
-			LOG.debug("Successfully updated binary with tcmid " + tcmid);
+			String id = String.format(BINARY_FORMAT, binaryContent.getPublicationId(), binaryContent.getBinaryId());
+            LOG.debug("Updating binary with id " + id);
+			manager.set(JsonHelper.createBinaryJson(id, binaryContent, newRelativePath));
+			LOG.debug("Successfully updated binary with id " + id);
 		}
 		catch (Exception e)
 		{
@@ -91,10 +94,10 @@ public class JPACouchbaseBinaryDAO extends JPABinaryContentDAO
 
 		try (CouchbaseManager manager = new CouchbaseManager())
 		{
-			String tcmid = String.format(ID_FORMAT, publicationId, binaryId);
-            LOG.debug("Removing binary with tcmid " + tcmid);
-			manager.delete(tcmid);
-			LOG.debug("Successfully deleted binary with tcmid " + tcmid);
+			String id = String.format(BINARY_FORMAT, publicationId, binaryId);
+            LOG.debug("Removing binary with id " + id);
+			manager.delete(id);
+			LOG.debug("Successfully deleted binary with id " + id);
 		}
 		catch (Exception e)
 		{

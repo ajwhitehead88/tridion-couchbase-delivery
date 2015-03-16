@@ -35,7 +35,7 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 	}
 	
 	/**
-	 * Create indexes the itinerary content into Couchbase
+	 * Create indexes the presentation content into Couchbase
 	 */
 	@Override
 	public void create(ComponentPresentation itemToUpdate, ComponentPresentationTypeEnum componentPresentationType) throws StorageException
@@ -62,6 +62,9 @@ public class JPACouchbasePresentationDAO extends JPAComponentPresentationDAO
 		}
 	}
 
+	/**
+	 * Update indexes the presentation content into Couchbase
+	 */
 	@Override
 	public void update(ComponentPresentation itemToUpdate, ComponentPresentationTypeEnum componentPresentationType) throws StorageException
 	{

@@ -34,7 +34,7 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 	}
 	
 	/**
-	 * Create indexes the itinerary content into Couchbase
+	 * Create indexes the page content into Couchbase
 	 */
 	@Override
 	public void create(CharacterData page, String relativePath) throws StorageException
@@ -58,6 +58,9 @@ public class JPACouchbasePageDAO extends JPAPageDAO
 		}
 	}
 
+	/**
+	 * Update indexes the page content into Couchbase
+	 */
 	@Override
 	public void update(CharacterData page, String originalRelativePath, String newRelativePath) throws StorageException
 	{
