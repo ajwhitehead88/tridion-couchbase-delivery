@@ -55,6 +55,10 @@
     <Compile Include="Helpers\ModelHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CouchbaseDelivery.Data.ContentModel.Contract\CouchbaseDelivery.Data.ContentModel.Contract.csproj">
+      <Project>{8b9675bf-c0aa-499d-a898-1291f7e0e9fa}</Project>
+      <Name>CouchbaseDelivery.Data.ContentModel.Contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CouchbaseDelivery.Data.ContentModel\CouchbaseDelivery.Data.ContentModel.csproj">
       <Project>{8fee23cf-0104-4bf2-9797-114ba35e6f9e}</Project>
       <Name>CouchbaseDelivery.Data.ContentModel</Name>

@@ -1,4 +1,7 @@
-﻿using CouchbaseDelivery.Data.ContentModel;
+﻿using System.Linq;
+using CouchbaseDelivery.Data.ContentModel;
+using CouchbaseDelivery.Data.ContentModel.Contract.Model;
+using CouchbaseDelivery.Data.ContentModel.Contract.Model.Structure;
 using CouchbaseDelivery.Data.ContentModel.Model;
 using CouchbaseDelivery.Data.ContentModel.Model.Content;
 using CouchbaseDelivery.Data.ContentModel.Model.Layout;
@@ -28,21 +31,19 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         {
             _mapper = new Mapper(Engine, Package);
 
-            PublishedDataModel model;
+            string json;
             if (Page != null)
             {
-                model = CreatePublishedPage();
+                json = ContentSerializer.Serialize(CreatePublishedPage());
             }
             else if (Template != null)
             {
-                model = CreatePublishedPresentation();
+                json = ContentSerializer.Serialize(CreatePublishedPresentation());
             }
             else
             {
                 throw new InvalidOperationException("Cannot run this template without a page or a component template");
             }
-
-            var json = ContentSerializer.Serialize(model);
 
             Package.PushItem(Package.OutputName, Package.CreateStringItem(ContentType.Text, json));
         }
@@ -100,7 +101,7 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         /// Create the presentation model array
         /// </summary>
         /// <returns></returns>
-        private List<ComponentPresentationModel> CreateComponentPresentationModels()
+        private IEnumerable<ComponentPresentationModel> CreateComponentPresentationModels()
         {
             var presentations = new List<ComponentPresentationModel>();
             foreach (var cp in Page.ComponentPresentations)

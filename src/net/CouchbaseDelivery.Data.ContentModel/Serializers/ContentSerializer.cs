@@ -1,4 +1,4 @@
-﻿using CouchbaseDelivery.Data.ContentModel.Model;
+﻿using CouchbaseDelivery.Data.ContentModel.Contract.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -14,7 +14,8 @@ namespace CouchbaseDelivery.Data.ContentModel.Serializers
                                                               ContractResolver = new CamelCasePropertyNamesContractResolver(),
                                                               DateFormatHandling = DateFormatHandling.IsoDateFormat,
                                                               Formatting = Formatting.Indented,
-                                                              TypeNameHandling = TypeNameHandling.All
+                                                              NullValueHandling = NullValueHandling.Ignore,
+                                                              TypeNameHandling = TypeNameHandling.None
                                                           };
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace CouchbaseDelivery.Data.ContentModel.Serializers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static string Serialize(PublishedDataModel model)
+        public static string Serialize(IPublishedDataModel model)
         {
             return JsonConvert.SerializeObject(model, Settings);
         }
@@ -32,7 +33,7 @@ namespace CouchbaseDelivery.Data.ContentModel.Serializers
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static T Deserialize<T>(string json) where T : PublishedDataModel
+        public static T Deserialize<T>(string json) where T : IPublishedDataModel
         {
             return JsonConvert.DeserializeObject<T>(json, Settings);
         }

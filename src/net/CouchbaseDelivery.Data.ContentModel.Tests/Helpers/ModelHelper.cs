@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using CouchbaseDelivery.Data.ContentModel.Contract.Enums;
 using CouchbaseDelivery.Data.ContentModel.Model;
 using CouchbaseDelivery.Data.ContentModel.Model.Content;
-using CouchbaseDelivery.Data.ContentModel.Model.Fields;
 using CouchbaseDelivery.Data.ContentModel.Model.Layout;
 using CouchbaseDelivery.Data.ContentModel.Model.Structure;
 
@@ -41,21 +42,19 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
                        SchemaName = "Page Schema",
                        TcmUri = "tcm:1-3-64",
                        TemplateModel = GetTemplateModel(),
-                       Metadata = new FieldSetModel
+                       Metadata = new []
                                   {
-                                      { "title", new StringFieldModel { Values = new[] { "Page Title" } } },
-                                      { "created_date", new DateFieldModel { Values = new[] { new DateTime(2013, 3, 2) } } },
-                                      {
-                                          "tags", new KeywordFieldModel
+                                      new FieldModel("title", FieldTypes.Text) { StringValues = new[] { "Page Title" } },
+                                      new FieldModel("created_date", FieldTypes.Date) { DateTimeValues = new[] { new DateTime(2013, 3, 2) } },
+                                      new FieldModel("tags", FieldTypes.Keyword)
                                                   {
-                                                      Values = new[]
+                                                      KeywordValues = new[]
                                                                {
                                                                    new KeywordModel { Title = "Tag 1", Key = "tag_1" },
                                                                    new KeywordModel { Title = "Tag 2", Key = "tag_2" },
                                                                    new KeywordModel { Title = "Tag 3", Key = "tag_3" }
                                                                }
                                                   }
-                                      }
                                   },
                        ComponentPresentations = new[]
                                                 {
@@ -93,40 +92,30 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
                        Title = string.Format("Component {0}", i),
                        TcmUri = string.Format("tcm:1-{0}-16", i),
                        SchemaName = "Component Schema",
-                       Content = new FieldSetModel
+                       Content = new []
                                  {
-                                     { "title", new StringFieldModel { Values = new[] { string.Format("Component Title {0}", i) } } },
-                                     { "subtitle", new StringFieldModel { Values = new[] { string.Format("Component Subtitle {0}", i) } } },
-                                     { "text", new StringFieldModel { Values = new[] { string.Format("Component Text {0}", i) } } },
-                                     {
-                                         "embedded", new EmbeddedFieldModel
+                                     new FieldModel("title", FieldTypes.Text) { StringValues = new[] { string.Format("Component Title {0}", i) } },
+                                     new FieldModel("subtitle", FieldTypes.Text) { StringValues = new[] { string.Format("Component Subtitle {0}", i) } },
+                                     new FieldModel("text", FieldTypes.Text) { StringValues = new[] { string.Format("Component Text {0}", i) } },
+                                     new FieldModel("embedded", FieldTypes.Embedded)
                                                      {
-                                                         Values = new[]
+                                                         EmbeddedValues = new[]
                                                                   {
-                                                                      new FieldSetModel
-                                                                      {
-                                                                          {
-                                                                              "embedded_title",
-                                                                              new StringFieldModel { Values = new[] { "Embedded title" } }
-                                                                          }
-                                                                      }
+                                                                      new [] { new FieldModel("embedded_title", FieldTypes.Text) { StringValues = new[] { "Embedded title" } } }
                                                                   }
                                                      }
-                                     },
                                  },
-                       Metadata = new FieldSetModel
+                       Metadata = new []
                                   {
-                                      {
-                                          "tags", new KeywordFieldModel
+                                          new FieldModel("tags", FieldTypes.Keyword)
                                                   {
-                                                      Values = new[]
+                                                      KeywordValues = new[]
                                                                {
                                                                    new KeywordModel { Title = "Tag 1", Key = "tag_1" },
                                                                    new KeywordModel { Title = "Tag 2", Key = "tag_2" },
                                                                    new KeywordModel { Title = "Tag 3", Key = "tag_3" }
                                                                }
                                                   }
-                                      }
                                   }
                    };
         }
@@ -150,14 +139,14 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
         /// Generate test data for the template schema
         /// </summary>
         /// <returns></returns>
-        private static FieldSetModel GetTemplateMetadataModel()
+        private static IEnumerable<FieldModel> GetTemplateMetadataModel()
         {
-            return new FieldSetModel
+            return new []
                    {
-                       { "view", new StringFieldModel { Values = new[] { "View" } } },
-                       { "action", new StringFieldModel { Values = new[] { "Action" } } },
-                       { "controller", new StringFieldModel { Values = new[] { "Controller" } } },
-                       { "link_levels", new NumberFieldModel { Values = new[] { 1d } } }
+                       new FieldModel("view", FieldTypes.Text) { StringValues = new[] { "View" } },
+                       new FieldModel("action", FieldTypes.Text) { StringValues = new[] { "Action" } },
+                       new FieldModel("controller", FieldTypes.Text) { StringValues = new[] { "Controller" } },
+                       new FieldModel("link_levels", FieldTypes.Number) { NumberValues = new[] { 1d } }
                    };
         }
 
@@ -173,9 +162,9 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
                        Title = "Test Structure Group",
                        SchemaName = "Structure Group Schema",
                        TcmUri = "tcm:1-2-4",
-                       Metadata = new FieldSetModel
+                       Metadata = new []
                                   {
-                                      { "title", new StringFieldModel { Values = new[] { "Structure Group Title" } } }
+                                      new FieldModel("title", FieldTypes.Text) { StringValues = new[] { "Structure Group Title" } } 
                                   }
                    };
         }
@@ -193,9 +182,9 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
                        SchemaName = "Publication Schema",
                        TcmUri = "tcm:0-1-2",
                        Title = "Test Publication",
-                       Metadata = new FieldSetModel
+                       Metadata = new []
                                   {
-                                      { "title", new StringFieldModel { Values = new[] { "Publication Title" } } }
+                                      new FieldModel("title", FieldTypes.Text) { StringValues = new[] { "Publication Title" } } 
                                   }
                    };
         }
