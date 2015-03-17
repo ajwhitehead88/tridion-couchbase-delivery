@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using CouchbaseDelivery.Data.ContentModel;
-using CouchbaseDelivery.Data.ContentModel.Contract.Model;
-using CouchbaseDelivery.Data.ContentModel.Contract.Model.Structure;
-using CouchbaseDelivery.Data.ContentModel.Model;
+﻿using CouchbaseDelivery.Data.ContentModel.Model;
 using CouchbaseDelivery.Data.ContentModel.Model.Content;
 using CouchbaseDelivery.Data.ContentModel.Model.Layout;
 using CouchbaseDelivery.Data.ContentModel.Model.Structure;
@@ -11,6 +7,7 @@ using CouchbaseDelivery.Tridion.ModularTemplates.Data;
 using CouchbaseDelivery.Tridion.ModularTemplates.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tridion.ContentManager.CommunicationManagement;
 using Tridion.ContentManager.ContentManagement;
 using Tridion.ContentManager.Templating;
@@ -31,14 +28,17 @@ namespace CouchbaseDelivery.Tridion.ModularTemplates.Tridion.Templates
         {
             _mapper = new Mapper(Engine, Package);
 
+
             string json;
             if (Page != null)
             {
-                json = ContentSerializer.Serialize(CreatePublishedPage());
+                var contentSerializer = new ContentSerializer<PagePublishedDataModel>();
+                json = contentSerializer.Serialize(CreatePublishedPage());
             }
             else if (Template != null)
             {
-                json = ContentSerializer.Serialize(CreatePublishedPresentation());
+                var contentSerializer = new ContentSerializer<PresentationPublishedDataModel>();
+                json = contentSerializer.Serialize(CreatePublishedPresentation());
             }
             else
             {

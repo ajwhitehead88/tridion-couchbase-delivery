@@ -12,13 +12,15 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests
         [TestMethod]
         public void CanRoundtripSerialisePage()
         {
+            var contentSerializer = new ContentSerializer<PagePublishedDataModel>();
+
             var page = ModelHelper.GetPublishedPageModel();
 
-            var json = ContentSerializer.Serialize(page);
+            var json = contentSerializer.Serialize(page);
 
-            var pageRoundtrip = ContentSerializer.Deserialize<PagePublishedDataModel>(json);
+            var pageRoundtrip = contentSerializer.Deserialize(json);
 
-            var jsonRoundtrip = ContentSerializer.Serialize(pageRoundtrip);
+            var jsonRoundtrip = contentSerializer.Serialize(pageRoundtrip);
 
             Assert.IsTrue(json.Equals(jsonRoundtrip, StringComparison.Ordinal));
         }
