@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using CouchbaseDelivery.Data.ContentModel.Contract.Enums;
+﻿using CouchbaseDelivery.Data.ContentModel.Contract.Enums;
 using CouchbaseDelivery.Data.ContentModel.Model;
 using CouchbaseDelivery.Data.ContentModel.Model.Content;
 using CouchbaseDelivery.Data.ContentModel.Model.Layout;
 using CouchbaseDelivery.Data.ContentModel.Model.Structure;
+using System;
+using System.Collections.Generic;
 
 namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
 {
@@ -27,6 +27,20 @@ namespace CouchbaseDelivery.Data.ContentModel.Tests.Helpers
                        PublishDate = new DateTime(2015, 2, 1),
                        Page = GetPageModel()
                    };
+        }
+
+        /// <summary>
+        /// Generate test data for a published presentation
+        /// </summary>
+        /// <returns></returns>
+        internal static PresentationPublishedDataModel GetPublishedPresentationModel()
+        {
+            return new PresentationPublishedDataModel
+            {
+                PublicationId = 1,
+                PublishDate = new DateTime(2015, 2, 1),
+                Presentation = GetComponentPresentationModel(0)
+            };
         }
 
         /// <summary>
